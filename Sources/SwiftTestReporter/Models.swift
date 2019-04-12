@@ -1,65 +1,76 @@
 import Foundation
 import XCTest
 
-typealias TestCaseKey = String
+public typealias TestCaseKey = String
 
 // Wrapper around XCTestSuite from XCTest
-public class TestSuite {
-    let name: String
-    var duration: TimeInterval
-    let timestamp: String
-    var testCases: [TestCaseKey: Test] = [:]
-    var testCasesWithFailure: [Test] {
-            return Array(testCases.filter { _, value in value.failure != nil }.values)
+public final class TestSuite {
+    public let name: String
+    public fileprivate(set) var testCases: [TestCaseKey: Test] = [:]
+    var duration: TimeInterval {
+        return testCases.values.reduce(0) { result, next in
+            return result + next.duration
         }
+    }
+
+    init(name: String, testCases: [TestCaseKey: Test]) {
+        self.name = name
+        self.testCases = testCases
+    }
+
+    convenience init(_ testSuite: XCTestSuite) {
+        let testCases = Dictionary(uniqueKeysWithValues: testSuite.tests.map { testCase in (TestSuite.getTestCaseKey(for: testCase), Test(testCase)) })
+        self.init(name: testSuite.name, testCases: testCases)
+    }
+
+    // MARK: - Getters
+
+    var testCasesWithFailure: [Test] {
+        return Array(testCases.filter { _, value in value.failure != nil }.values)
+    }
 
     var testCasesWithError: [Test] {
-            return Array(testCases.filter { _, value in value.error != nil }.values)
-        }
+        return Array(testCases.filter { _, value in value.error != nil }.values)
+    }
+
+    // MARK: - Helpers
+
+    static func getTestCaseKey(for testCase: XCTest) -> TestCaseKey {
+        return "\(testCase)" + testCase.name
+    }
 
     func markTest(_ test: XCTest, failure: Failure) {
         let key = TestSuite.getTestCaseKey(for: test)
         if let testCase = testCases[key] {
-            testCases[key] = testCase.failure(failure)
+            testCases[key] = testCase.setFailure(failure)
         }
     }
 
     func markTest(_ test: XCTest, error: Error) {
         let key = TestSuite.getTestCaseKey(for: test)
         if let testCase = testCases[key] {
-            testCases[key] = testCase.error(error)
+            testCases[key] = testCase.setError(error)
         }
     }
 
     func updateTestDuration(for test: XCTest, _ duration: TimeInterval) {
         let key = TestSuite.getTestCaseKey(for: test)
         if let testCase = testCases[key] {
-            testCases[key] = testCase.duration(duration)
+            testCases[key] = testCase.setDuration(duration)
         }
-    }
-
-    static func getTestCaseKey(for testCase: XCTest) -> TestCaseKey {
-        return "\(testCase)" + testCase.name
-    }
-
-    init(_ testSuite: XCTestSuite) {
-        name = testSuite.name
-        duration = testSuite.testRun?.totalDuration ?? 0
-        timestamp = testSuite.testRun?.startDate?.timeIntervalSince1970.description ?? "0"
-        testCases = Dictionary(uniqueKeysWithValues: testSuite.tests.map { testCase in (TestSuite.getTestCaseKey(for: testCase), Test(testCase)) })
     }
 }
 
 // Wrapper around XCTest from XCTest
-struct Test {
-    let test: XCTest
+public struct Test {
+    private let test: XCTest
     var className: String {
-            return "\(test)"
-        }
+        return "\(test)"
+    }
 
     var name: String {
-            return test.name.components(separatedBy: ".").last ?? "unknown name"
-        }
+        return test.name.components(separatedBy: ".").last ?? "unknown name"
+    }
 
     let duration: TimeInterval
     let failure: Failure?
@@ -79,15 +90,15 @@ struct Test {
 
 // Make struct immutable
 extension Test {
-    func failure(_ failure: Failure) -> Test {
+    func setFailure(_ failure: Failure) -> Test {
         return Test(test, failure: failure, error: error, duration: duration)
     }
 
-    func error(_ error: Error) -> Test {
+    func setError(_ error: Error) -> Test {
         return Test(test, failure: failure, error: error, duration: duration)
     }
 
-    func duration(_ duration: TimeInterval) -> Test {
+    func setDuration(_ duration: TimeInterval) -> Test {
         return Test(test, failure: failure, error: error, duration: duration)
     }
 }
