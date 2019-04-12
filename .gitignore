@@ -1,0 +1,15 @@
+# Intellij Idea project files
+.idea
+*.iml
+*.ipr
+*.iws
+
+# mac os x
+.DS_Store
+
+# netbeans
+.nb-gradle
+
+.build
+SwiftTestReporter.xcodeproj
+tests.xml

@@ -1,0 +1,4 @@
+--header strip
+--patternlet inline
+--commas inline
+--disable "redundantReturn, strongOutlets, linebreakAtEndOfFile, numberFormatting, indent"
