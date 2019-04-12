@@ -8,9 +8,8 @@ extension String {
 }
 
 class JUnitReporterTests: XCTestCase {
-    private func makeTestCaseStub(name: String = "Stub Test") -> TestSuite {
-        class StubTestSuite: XCTestSuite {}
-        return TestSuite(StubTestSuite(name: name))
+    private func makeTestCaseStub(name: String = "Stub Test", testCases: [TestCaseKey: Test] = [:]) -> TestSuite {
+        return TestSuite(name: name, testCases: testCases)
     }
 
     func testReporterShouldReturnXMLForEmptySuite() {
@@ -28,20 +27,26 @@ class JUnitReporterTests: XCTestCase {
         }
     }
 
-    // TODO: fix test on Mac
     func testReporterShouldReturnXMLForFailedTest() {
-        let testSuite = makeTestCaseStub()
+        #if os(Linux)
+        let className = "SwiftTestReporterTests.JUnitReporterTests"
+        let testName = "testReporterShouldReturnXMLForFailedTest"
+        #else
+        let className = "-[JUnitReporterTests testReporterShouldReturnXMLForFailedTest]"
+        let testName = "-[JUnitReporterTests testReporterShouldReturnXMLForFailedTest]"
+        #endif
+        let testCase = Test(self).setFailure(Failure(message: "test failed"))
+        let testSuite = makeTestCaseStub(name: "TestFoo", testCases: ["test": testCase])
         let expected = """
         <?xml version="1.0" encoding="UTF-8"?>
         <testsuites>
-            <testsuite tests="1" failures="1" disabled="0" errors="0" time="0.0" name="Stub Test">
-                <testcase classname="SwiftTestReporterTests.JUnitReporterTests" name="testReporterShouldReturnXMLForFailedTest" time="0.0">
+            <testsuite tests="1" failures="1" disabled="0" errors="0" time="0.0" name="TestFoo">
+                <testcase classname="\(className)" name="\(testName)" time="0.0">
                     <failure message="test failed"></failure>
                 </testcase>
             </testsuite>
         </testsuites>
         """
-        testSuite.testCases["test1"] = Test(self).failure(Failure(message: "test failed"))
         JUnitReporter().report(for: [testSuite]) { content in
             XCTAssertEqual(content.replacingTabsWithSpaces(), expected.replacingTabsWithSpaces())
         }

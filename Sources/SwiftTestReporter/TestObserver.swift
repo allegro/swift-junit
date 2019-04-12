@@ -1,7 +1,7 @@
 import Foundation
 import XCTest
 
-public class TestObserver: NSObject {
+public final class TestObserver: NSObject {
     var testSuites: TestSuites = []
     var currentTestSuite: TestSuite?
     var failed: [Test] = []
@@ -58,10 +58,8 @@ extension TestObserver: XCTestObservation {
     // MARK: - Bundle
 
     public func testSuiteDidFinish(_ testSuite: XCTestSuite) {
-        let testRun = testSuite.testRun!
         if isTestCaseSuite(testSuite) {
             if let currentTestSuite = currentTestSuite {
-                currentTestSuite.duration = testRun.totalDuration
                 testSuites.append(currentTestSuite)
             }
         }
