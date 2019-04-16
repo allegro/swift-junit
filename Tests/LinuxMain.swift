@@ -8,7 +8,8 @@ _ = TestObserver()
 
 XCTMain([
     testCase(JUnitReporterTests.allTests),
-    testCase(UtilsTests.allTests)
+    testCase(UtilsTests.allTests),
+    testCase(HandlersTests.allTests)
 ])
 
 #endif
