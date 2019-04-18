@@ -1,5 +1,10 @@
-Swift Test Reporter
-================
+# Swift Test Reporter
+
+[![Build Status](https://travis-ci.org/allegro/swift-junit.svg?branch=master)](https://travis-ci.org/allegro/swift-junit)
+![Swift 4.2](https://img.shields.io/badge/swift-4.2-brightgreen.svg)
+![Linux](https://img.shields.io/badge/linux-brightgreen.svg)
+![MacOS](https://img.shields.io/badge/macos-brightgreen.svg)
+
 
 A Swift library (without any dependencies) for creating JUnit XML test results that can be interpreted by tools such as Bamboo or Jenkins.
 
