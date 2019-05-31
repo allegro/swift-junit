@@ -1,4 +1,5 @@
 import Foundation
+import HTMLString
 
 /// Describes all elements needed to build valid XML.
 indirect enum JUnitElement: CustomStringConvertible {
@@ -41,10 +42,10 @@ indirect enum JUnitElement: CustomStringConvertible {
             return testCaseElement
 
         case .failure(let message):
-            return "\n\t\t\t<failure message=\"\(message)\"></failure>\n\t\t"
+            return "\n\t\t\t<failure message=\"\(message.addingASCIIEntities)\"></failure>\n\t\t"
 
         case .error(let message):
-            return "\n\t\t\t<error message=\"\(message)\"></error>\n\t\t"
+            return "\n\t\t\t<error message=\"\(message.addingASCIIEntities)\"></error>\n\t\t"
         }
     }
 }

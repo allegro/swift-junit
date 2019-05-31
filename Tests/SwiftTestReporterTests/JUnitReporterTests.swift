@@ -51,9 +51,35 @@ class JUnitReporterTests: XCTestCase {
             XCTAssertEqual(content.replacingTabsWithSpaces(), expected.replacingTabsWithSpaces())
         }
     }
+    
+    func testProperEscapingOfErrorMessages() {
+        #if os(Linux)
+        let className = "SwiftTestReporterTests.JUnitReporterTests"
+        let testName = "testProperEscapingOfErrorMessages"
+        #else
+        let className = "-[JUnitReporterTests testProperEscapingOfErrorMessages]"
+        let testName = "-[JUnitReporterTests testProperEscapingOfErrorMessages]"
+        #endif
+        let testCase = Test(self).setFailure(Failure(message: "\"test\" \"failed\""))
+        let testSuite = makeTestCaseStub(name: "TestFoo", testCases: ["test": testCase])
+        let expected = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <testsuites>
+            <testsuite tests="1" failures="1" disabled="0" errors="0" time="0.0" name="TestFoo">
+                <testcase classname="\(className)" name="\(testName)" time="0.0">
+                    <failure message="&#34;test&#34; &#34;failed&#34;"></failure>
+                </testcase>
+            </testsuite>
+        </testsuites>
+        """
+        JUnitReporter().report(for: [testSuite]) { content in
+            XCTAssertEqual(content.replacingTabsWithSpaces(), expected.replacingTabsWithSpaces())
+        }
+    }
 
     static var allTests = [
         ("testReporterShouldReturnXMLForEmptySuite", testReporterShouldReturnXMLForEmptySuite),
-        ("testReporterShouldReturnXMLForFailedTest", testReporterShouldReturnXMLForFailedTest)
+        ("testReporterShouldReturnXMLForFailedTest", testReporterShouldReturnXMLForFailedTest),
+        ("testProperEscapingOfErrorMessages", testProperEscapingOfErrorMessages),
     ]
 }
