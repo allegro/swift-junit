@@ -24,7 +24,7 @@ indirect enum JUnitElement: CustomStringConvertible {
         case .testSuite(let testsCount, let failuresCount, let disabledCount, let errorsCount, let time, let name, let tests):
             let testsElement = tests.map { $0.description }.joined(separator: "\n")
             return """
-            \t<testsuite tests=\"\(testsCount)\" failures=\"\(failuresCount)\" disabled=\"0\" errors=\"\(errorsCount)\" time=\"\(time)\" name=\"\(name)\">
+            \t<testsuite tests=\"\(testsCount)\" failures=\"\(failuresCount)\" disabled=\"\(disabledCount)\" errors=\"\(errorsCount)\" time=\"\(time)\" name=\"\(name)\">
             \(testsElement)
             \t</testsuite>
             """
