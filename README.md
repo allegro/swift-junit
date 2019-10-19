@@ -6,7 +6,7 @@
 ![MacOS](https://img.shields.io/badge/macos-brightgreen.svg)
 
 
-A Swift library (without any dependencies) for creating JUnit XML test results that can be interpreted by tools such as Bamboo or Jenkins.
+A Swift library for creating JUnit XML test results that can be interpreted by tools such as Bamboo or Jenkins.
 
 Sample output:
 
