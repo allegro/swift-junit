@@ -1,13 +1,11 @@
 # Swift Test Reporter
 
 [![Build Status](https://travis-ci.org/allegro/swift-junit.svg?branch=master)](https://travis-ci.org/allegro/swift-junit)
-![Swift 4.2](https://img.shields.io/badge/swift-4.2-brightgreen.svg)
 ![Swift 5.0](https://img.shields.io/badge/swift-5.0-brightgreen.svg)
 ![Swift 5.1](https://img.shields.io/badge/swift-5.1-brightgreen.svg)
 ![Swift 5.2](https://img.shields.io/badge/swift-5.2-brightgreen.svg)
 ![Linux](https://img.shields.io/badge/linux-brightgreen.svg)
 ![MacOS](https://img.shields.io/badge/macos-brightgreen.svg)
-
 
 A Swift library for creating JUnit XML test results that can be interpreted by tools such as Bamboo or Jenkins.
 
@@ -38,7 +36,10 @@ import PackageDescription
 let package = Package(
         dependencies: [
                 ...
-                .package(url: "https://github.com/allegro/swift-junit.git", from: "1.0.0"),
+                .package(url: "https://github.com/allegro/swift-junit.git", from: "2.0.0"),
+                // or for Swift 4.x
+                // .package(url: "https://github.com/allegro/swift-junit.git", from: .upToNextMajor(from: "1.0.0")),
+                
         ]
         ...
         targets: [
