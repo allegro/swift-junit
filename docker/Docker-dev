@@ -1,4 +1,4 @@
-FROM swift:4.2 as swiftformat
+FROM swift:5.2 as swiftformat
 ARG SWIFTFORMAT_VERSION=0.40.0
 RUN git clone -b ${SWIFTFORMAT_VERSION} --single-branch --depth 1 https://github.com/nicklockwood/SwiftFormat.git && \
    cd SwiftFormat && \
@@ -7,7 +7,7 @@ RUN git clone -b ${SWIFTFORMAT_VERSION} --single-branch --depth 1 https://github
    cd .. && \
    rm -rf SwiftFormat
 
-FROM swift:4.2
+FROM swift:5.2
 ENV PROJECT_PATH /opt/swift-junit
 WORKDIR $PROJECT_PATH
 COPY --from=swiftformat /usr/bin/swiftformat /usr/bin/swiftformat
