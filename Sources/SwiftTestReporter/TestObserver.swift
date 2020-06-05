@@ -24,7 +24,7 @@ extension TestObserver: XCTestObservation {
         /// XCTest creates additional XCTestSuite:
         ///  - "All Test" which contains all test suites
         ///  - test suite for each module in tests (e.g. SwiftTestReporterTests)
-        let className = getXCTestClassName(testSuite)
+        let className = testSuite.customClassName
         return className == "XCTestCaseSuite"
     }
 
