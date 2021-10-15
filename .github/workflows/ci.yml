@@ -1,0 +1,36 @@
+name: 'CI'
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  release:
+    types:
+      - created
+
+jobs:
+  build:
+    name: Swift ${{ matrix.swift }} on ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, macos-11]
+        swift: ["5.3", "5.4"]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: fwal/setup-swift@v1
+        with:
+          swift-version: ${{ matrix.swift }}
+
+      - name: Get swift version
+        run: swift --version
+
+      - uses: actions/checkout@v2
+
+      - name: Run tests
+        run: swift test
