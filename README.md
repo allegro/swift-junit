@@ -1,6 +1,5 @@
 # Swift Test Reporter
 
-[![Build Status](https://travis-ci.org/allegro/swift-junit.svg?branch=master)](https://travis-ci.org/allegro/swift-junit)
 ![Swift 5.0](https://img.shields.io/badge/swift-5.0-brightgreen.svg)
 ![Swift 5.1](https://img.shields.io/badge/swift-5.1-brightgreen.svg)
 ![Swift 5.2](https://img.shields.io/badge/swift-5.2-brightgreen.svg)
