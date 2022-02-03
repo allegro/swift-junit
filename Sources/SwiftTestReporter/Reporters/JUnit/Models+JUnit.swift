@@ -10,6 +10,7 @@ extension TestSuite: XMLJUnitFormat {
             failuresCount: testCasesWithFailure.count,
             disabledCount: 0,
             errorsCountInt: testCasesWithError.count,
+            skippedCount: skippedTestCount,
             duration: duration,
             name: name,
             tests: testCases
@@ -24,7 +25,8 @@ extension Test: XMLJUnitFormat {
             name: name,
             duration: duration,
             failure: failure?.getXMLElement(),
-            error: error?.getXMLElement()
+            error: error?.getXMLElement(),
+            skipped: skipped
         )
     }
 }

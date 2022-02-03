@@ -33,6 +33,10 @@ public final class TestSuite {
         return Array(testCases.filter { _, value in value.error != nil }.values)
     }
 
+    var skippedTestCount: Int {
+      return testCases.filter { _, value in value.skipped }.count
+    }
+
     // MARK: - Helpers
 
     static func getTestCaseKey(for testCase: XCTest) -> TestCaseKey {
@@ -50,6 +54,13 @@ public final class TestSuite {
         let key = TestSuite.getTestCaseKey(for: test)
         if let testCase = testCases[key] {
             testCases[key] = testCase.setError(error)
+        }
+    }
+
+    func markTestSkipped(_ test: XCTest) {
+        let key = TestSuite.getTestCaseKey(for: test)
+        if let testCase = testCases[key] {
+            testCases[key] = testCase.setSkipped()
         }
     }
 
@@ -75,11 +86,13 @@ public struct Test {
     let duration: TimeInterval
     let failure: Failure?
     let error: Error?
+    let skipped: Bool
 
-    init(_ test: XCTest, failure: Failure? = nil, error: Error? = nil, duration: TimeInterval? = nil) {
+    init(_ test: XCTest, failure: Failure? = nil, error: Error? = nil, skipped: Bool = false, duration: TimeInterval? = nil) {
         self.test = test
         self.failure = failure
         self.error = error
+        self.skipped = skipped
         if let duration = duration {
             self.duration = duration
         } else {
@@ -91,15 +104,19 @@ public struct Test {
 // Make struct immutable
 extension Test {
     func setFailure(_ failure: Failure) -> Test {
-        return Test(test, failure: failure, error: error, duration: duration)
+        return Test(test, failure: failure, error: error, skipped: skipped, duration: duration)
     }
 
     func setError(_ error: Error) -> Test {
-        return Test(test, failure: failure, error: error, duration: duration)
+        return Test(test, failure: failure, error: error, skipped: skipped, duration: duration)
     }
 
     func setDuration(_ duration: TimeInterval) -> Test {
-        return Test(test, failure: failure, error: error, duration: duration)
+        return Test(test, failure: failure, error: error, skipped: skipped, duration: duration)
+    }
+
+    func setSkipped() -> Test {
+        return Test(test, failure: failure, error: error, skipped: true, duration: duration)
     }
 }
 
