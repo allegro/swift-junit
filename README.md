@@ -1,9 +1,6 @@
 # Swift Test Reporter
 
-![Swift 5.3](https://img.shields.io/badge/swift-5.3-brightgreen.svg)
-![Swift 5.4](https://img.shields.io/badge/swift-5.4-brightgreen.svg)
-![Linux](https://img.shields.io/badge/linux-brightgreen.svg)
-![MacOS](https://img.shields.io/badge/macos-brightgreen.svg)
+[![CI](https://github.com/allegro/swift-junit/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/allegro/swift-junit/actions/workflows/ci.yml)
 
 
 A Swift library for creating JUnit XML test results that can be interpreted by tools such as Bamboo or Jenkins.
