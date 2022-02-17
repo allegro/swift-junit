@@ -43,6 +43,9 @@ extension TestObserver: XCTestObservation {
     public func testCaseDidFinish(_ testCase: XCTestCase) {
         let testRun = testCase.testRun!
         if let currentTestSuite = currentTestSuite {
+            if testRun.hasBeenSkipped {
+                currentTestSuite.markTestSkipped(testCase)
+            }
             currentTestSuite.updateTestDuration(for: testCase, testRun.totalDuration)
         }
     }

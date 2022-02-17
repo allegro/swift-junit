@@ -17,7 +17,7 @@ class JUnitReporterTests: XCTestCase {
         let expected = """
         <?xml version="1.0" encoding="UTF-8"?>
         <testsuites>
-            <testsuite tests="0" failures="0" disabled="0" errors="0" time="0.0" name="Stub Test">
+            <testsuite tests="0" failures="0" disabled="0" errors="0" skipped="0" time="0.0" name="Stub Test">
 
             </testsuite>
         </testsuites>
@@ -40,7 +40,7 @@ class JUnitReporterTests: XCTestCase {
         let expected = """
         <?xml version="1.0" encoding="UTF-8"?>
         <testsuites>
-            <testsuite tests="1" failures="1" disabled="0" errors="0" time="0.0" name="TestFoo">
+            <testsuite tests="1" failures="1" disabled="0" errors="0" skipped="0" time="0.0" name="TestFoo">
                 <testcase classname="\(className)" name="\(testName)" time="0.0">
                     <failure message="test failed"></failure>
                 </testcase>
@@ -51,6 +51,30 @@ class JUnitReporterTests: XCTestCase {
             XCTAssertEqual(content.replacingTabsWithSpaces(), expected.replacingTabsWithSpaces())
         }
     }
+
+  func testReporterShouldReturnXMLForSkippedTest() {
+      #if os(Linux)
+      let className = "SwiftTestReporterTests.JUnitReporterTests"
+      let testName = "testReporterShouldReturnXMLForSkippedTest"
+      #else
+      let className = "-[JUnitReporterTests testReporterShouldReturnXMLForSkippedTest]"
+      let testName = "-[JUnitReporterTests testReporterShouldReturnXMLForSkippedTest]"
+      #endif
+      let testCase = Test(self).setSkipped()
+      let testSuite = makeTestCaseStub(name: "TestFoo", testCases: ["test": testCase])
+      let expected = """
+      <?xml version="1.0" encoding="UTF-8"?>
+      <testsuites>
+          <testsuite tests="1" failures="0" disabled="0" errors="0" skipped="1" time="0.0" name="TestFoo">
+              <testcase classname="\(className)" name="\(testName)" time="0.0"><skipped/></testcase>
+          </testsuite>
+      </testsuites>
+      """
+      JUnitReporter().report(for: [testSuite]) { content in
+          XCTAssertEqual(content.replacingTabsWithSpaces(), expected.replacingTabsWithSpaces())
+      }
+  }
+
     
     func testProperEscapingOfErrorMessages() {
         #if os(Linux)
@@ -65,7 +89,7 @@ class JUnitReporterTests: XCTestCase {
         let expected = """
         <?xml version="1.0" encoding="UTF-8"?>
         <testsuites>
-            <testsuite tests="1" failures="1" disabled="0" errors="0" time="0.0" name="TestFoo">
+            <testsuite tests="1" failures="1" disabled="0" errors="0" skipped="0" time="0.0" name="TestFoo">
                 <testcase classname="\(className)" name="\(testName)" time="0.0">
                     <failure message="&#34;test&#34; &#34;failed&#34;"></failure>
                 </testcase>
