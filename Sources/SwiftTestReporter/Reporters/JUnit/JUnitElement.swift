@@ -45,10 +45,10 @@ indirect enum JUnitElement: CustomStringConvertible {
             return testCaseElement
 
         case .failure(let message):
-            return "\n\t\t\t<failure message=\"\(message.addingASCIIEntities)\"></failure>\n\t\t"
+            return "\n\t\t\t<failure message=\"\(message.addingASCIIEntities())\"></failure>\n\t\t"
 
         case .error(let message):
-            return "\n\t\t\t<error message=\"\(message.addingASCIIEntities)\"></error>\n\t\t"
+            return "\n\t\t\t<error message=\"\(message.addingASCIIEntities())\"></error>\n\t\t"
         }
     }
 }

@@ -8,7 +8,7 @@ let package = Package(
         .library(name: "SwiftTestReporter", targets: ["SwiftTestReporter"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/alexaubry/HTMLString.git", from: "5.0.0"),
+        .package(url: "https://github.com/alexaubry/HTMLString.git", from: "6.0.0"),
     ],
     targets: [
         .target(name: "SwiftTestReporter", dependencies: [ "HTMLString" ]),
