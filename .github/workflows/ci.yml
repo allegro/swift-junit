@@ -20,7 +20,7 @@ jobs:
         os: [ubuntu-20.04, macos-11]
         swift: ["5.5", "5.10"]
         include:
-          - os: ubuntu-22.04
+          - os: macos-15
             swift: "6.0"
 
     runs-on: ${{ matrix.os }}
