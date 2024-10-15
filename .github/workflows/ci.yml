@@ -21,7 +21,7 @@ jobs:
         swift: ["5.5", "5.10"]
         include:
           - os: ubuntu-22.04
-            swift: ["6.0"]
+            swift: "6.0"
 
     runs-on: ${{ matrix.os }}
 
