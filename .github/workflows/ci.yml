@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - master
+    paths:
+      - '**.swift'
+      - '**.yml'
+      
   pull_request:
     branches:
       - master
@@ -11,26 +15,29 @@ on:
     types:
       - created
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-ci
+  cancel-in-progress: true
+
 jobs:
-  build:
-    name: Swift ${{ matrix.swift }} on ${{ matrix.os }}
+  linux:
+    name: Swift ${{ matrix.image }} on ubuntu-latest
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-11]
-        swift: ["5.5"]
+        image: ["swift:5.9", "swift:5.10", "swift:6.0"]
 
-    runs-on: ${{ matrix.os }}
+    container:
+      image: ${{ matrix.image }}
 
     steps:
-      - uses: fwal/setup-swift@v1
-        with:
-          swift-version: ${{ matrix.swift }}
-
+      
       - name: Get swift version
         run: swift --version
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Run tests
         run: swift test
+  
