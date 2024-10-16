@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-11]
+        os: [ubuntu-20.04, macos-latest]
         swift: ["5.5", "5.10"]
         include:
           - os: macos-15
@@ -26,14 +26,14 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: fwal/setup-swift@v2
+      - uses: swift-actions/setup-swift
         with:
           swift-version: ${{ matrix.swift }}
 
       - name: Get swift version
         run: swift --version
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Run tests
         run: swift test
