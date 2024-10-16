@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - master
+    paths:
+      - '**.swift'
+      - '**.yml'
+      
   pull_request:
     branches:
       - master
@@ -12,24 +16,42 @@ on:
       - created
 
 jobs:
-  build:
+  macos:
     name: Swift ${{ matrix.swift }} on ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-latest]
-        swift: ["5.5", "5.10"]
-        include:
-          - os: macos-15
-            swift: "6.0"
+        os: [macos-11]
+        swift: ["5.5"]
 
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: swift-actions/setup-swift
+      - uses: fwal/setup-swift@v1
         with:
           swift-version: ${{ matrix.swift }}
 
+      - name: Get swift version
+        run: swift --version
+
+      - uses: actions/checkout@v2
+
+      - name: Run tests
+        run: swift test
+
+  linux:
+    name: Swift ${{ matrix.swift }} on ubuntu-latest
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        image: ["swift:5.5", "swift:5.9", "swift:5.10", "swift:6.0"]
+
+    container:
+      image: ${{ matrix.image }}
+
+    steps:
+      
       - name: Get swift version
         run: swift --version
 
@@ -37,3 +59,4 @@ jobs:
 
       - name: Run tests
         run: swift test
+  
