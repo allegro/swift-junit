@@ -15,6 +15,10 @@ on:
     types:
       - created
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-ci
+  cancel-in-progress: true
+
 jobs:
   linux:
     name: Swift ${{ matrix.image }} on ubuntu-latest
