@@ -16,31 +16,8 @@ on:
       - created
 
 jobs:
-  macos:
-    name: Swift ${{ matrix.swift }} on ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [macos-11]
-        swift: ["5.5"]
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - uses: fwal/setup-swift@v1
-        with:
-          swift-version: ${{ matrix.swift }}
-
-      - name: Get swift version
-        run: swift --version
-
-      - uses: actions/checkout@v2
-
-      - name: Run tests
-        run: swift test
-
   linux:
-    name: Swift ${{ matrix.swift }} on ubuntu-latest
+    name: Swift ${{ matrix.image }} on ubuntu-latest
     runs-on: ubuntu-latest
 
     strategy:
